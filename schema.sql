@@ -1,6 +1,3 @@
--- Drop the Comments table if it already exists
-DROP TABLE IF EXISTS Comments;
-
 -- Create the Comments table
 CREATE TABLE IF NOT EXISTS Comments (
     CommentID INTEGER PRIMARY KEY,  -- Unique identifier for each comment
