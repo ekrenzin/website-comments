@@ -1,5 +1,6 @@
 export interface Env {
 	DB: D1Database;
+	EAN_API_KEY: string;
 }
 
 export default {
@@ -11,12 +12,17 @@ export default {
 	 */
 	async fetch(request: Request, env: Env) {
 		const body = JSON.parse(await request.text());
+		//if the headers is missing the api key (EAN_API_KEY) then return 401
+		const EAN_API_KEY = env.EAN_API_KEY;
+		if (request.headers.get('x-api-key') !== EAN_API_KEY) {
+			return new Response('Unauthorized', { status: 401 });
+		}
 		
 		const { method } = body;
 		if (!method) {
 			// Handle the case where 'source' parameter is missing
 			return new Response('method parameter is required', { status: 400 });
-		}
+		}	
 		if (method === 'list') {
 			return handleFetchComments(body, env);
 		} else if (method === 'upload') {
